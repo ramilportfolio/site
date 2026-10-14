@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Квиз: подбор тренировок — демо</title>
+<style>
+:root{--bg:#10151f;--card:#1a2232;--ink:#f2f5fa;--mut:#9aa7bf;--acc:#34e0a1;--line:#2a3550}
+*{box-sizing:border-box}body{margin:0;font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+.wrap{max-width:520px;margin:0 auto;padding:16px 16px 40px}
+.demo{background:#3b3320;color:#ffe9a8;border-radius:10px;padding:8px 12px;font-size:13px;margin-bottom:12px}
+.bar{height:6px;background:var(--line);border-radius:6px;overflow:hidden;margin:6px 0 20px}.bar i{display:block;height:100%;background:var(--acc);width:0;transition:width .3s}
+h1{font-size:26px;margin:0 0 6px}h2{font-size:22px;margin:0 0 14px}.mut{color:var(--mut)}
+.opt{display:block;width:100%;text-align:left;margin:0 0 10px;padding:16px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;cursor:pointer}
+.opt:active,.opt:hover{border-color:var(--acc)}
+.main{width:100%;padding:15px;border:0;border-radius:12px;background:var(--acc);color:#05241a;font-weight:800;font-size:17px;font-family:inherit;cursor:pointer;margin-top:8px}
+.res{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px}
+.res ul{padding-left:20px;margin:8px 0}
+input{width:100%;padding:13px;border-radius:10px;border:1px solid var(--line);background:#0e1320;color:var(--ink);font-size:16px;margin-bottom:10px}
+#box{white-space:pre-wrap;background:#0e1320;border-radius:10px;padding:10px;font-size:13px;margin-top:10px;display:none}
+</style></head><body><div class="wrap">
+<div class="demo" id="demo" hidden>Демо-проект. Клуб вымышленный. Заявка не отправляется, пока не указан Telegram в CONFIG.</div>
+<div class="bar"><i id="bar"></i></div><div id="view"></div></div>
+<script>
+// ===== НАСТРОЙКИ ПОД КЛИЕНТА =====
+const CONFIG={club:"FitLab (вымышленный)",telegram:"[ник_клиента_без_@]",offer:"Пробная тренировка бесплатно"};
+const Q=[
+ {q:"Какая у вас цель?",a:[["Похудеть","slim"],["Набрать форму и силу","power"],["Стать выносливее и бодрее","tone"]]},
+ {q:"Как часто готовы заниматься?",a:[["2 раза в неделю","2"],["3 раза в неделю","3"],["4 и больше","4"]]},
+ {q:"Какой у вас опыт?",a:[["Начинаю с нуля","0"],["Занимался раньше","1"],["Опытный","2"]]},
+ {q:"Что удобнее?",a:[["Группа и компания","group"],["Персональный тренер","pt"],["Сам по себе в зале","solo"]]}];
+const PROG={
+ slim:["Жиросжигание + кардио","Круговые тренировки 3 раза в неделю, шаги и питание по простой схеме."],
+ power:["Сила и масса","Базовые упражнения со штангой и гантелями, прогрессия нагрузки."],
+ tone:["Тонус и выносливость","Функциональные тренировки, мобильность, лёгкое кардио."]};
+// =================================
+const $=id=>document.getElementById(id);let step=0,ans=[];
+if(CONFIG.telegram.includes("["))$("demo").hidden=false;
+function render(){
+ $("bar").style.width=(step/(Q.length+1)*100)+"%";
+ if(step===0&&!ans.length){}
+ if(step<Q.length){const q=Q[step];$("view").innerHTML=`<h2>${q.q}</h2>`+q.a.map((a,i)=>`<button class="opt" data-i="${i}">${a[0]}</button>`).join("")+`<p class="mut">Вопрос ${step+1} из ${Q.length}</p>`;
+  $("view").querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ans[step]=Q[step].a[+b.dataset.i];step++;render()})}
+ else if(step===Q.length){const g=ans[0][1],p=PROG[g],f=ans[1][0],mode=ans[3][0];
+  $("view").innerHTML=`<div class="res"><div class="mut">Ваша программа</div><h2>${p[0]}</h2><p>${p[1]}</p><ul><li>Режим: ${f.toLowerCase()}</li><li>Формат: ${mode.toLowerCase()}</li><li>Уровень: ${ans[2][0].toLowerCase()}</li></ul></div>
+  <h2>${CONFIG.offer}</h2><p class="mut">Оставьте контакты, администратор запишет вас на удобное время.</p>
+  <input id="n" placeholder="Имя"><input id="p" type="tel" placeholder="Телефон"><button class="main" id="go">Записаться</button><div id="box"></div>`;
+  $("go").onclick=send}
+ $("bar").style.width=(Math.min(step,Q.length)/Q.length*100)+"%";
+}
+function send(){const n=$("n").value.trim(),p=$("p").value.trim();
+ if(n.length<2||p.replace(/\D/g,"").length<10){alert("Укажите имя и телефон (не меньше 10 цифр)");return}
+ const t="Новая заявка из квиза\nИмя: "+n+"\nТелефон: "+p+"\nЦель: "+ans[0][0]+"\nЧастота: "+ans[1][0]+"\nОпыт: "+ans[2][0]+"\nФормат: "+ans[3][0]+"\nПрограмма: "+PROG[ans[0][1]][0];
+ if(CONFIG.telegram.includes("[")){const b=$("box");b.style.display="block";b.textContent="Демо-режим, так заявка придёт администратору:\n\n"+t;try{navigator.clipboard.writeText(t)}catch(e){}}
+ else window.open("https://t.me/"+CONFIG.telegram+"?text="+encodeURIComponent(t),"_blank")}
+render();
+</script></body></html>

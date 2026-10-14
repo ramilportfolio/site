@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Учёт заказов — демо</title>
+<style>
+:root{--ink:#1d2433;--bg:#f3f5f9;--line:#dde3ee;--acc:#3b5bdb;--mut:#667089}
+*{box-sizing:border-box}body{margin:0;font:15px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+.wrap{max-width:760px;margin:0 auto;padding:14px 14px 40px}
+.demo{background:#fff3cd;border:1px solid #f1d98a;border-radius:10px;padding:8px 12px;font-size:13px;margin-bottom:12px}
+h1{font-size:24px;margin:6px 0 12px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.st{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px}.st b{display:block;font-size:20px}.st span{color:var(--mut);font-size:12px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.grid .w{grid-column:1/-1}
+input,select{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;font:inherit;background:#fff}
+button{font:inherit;cursor:pointer}.main{background:var(--acc);color:#fff;border:0;border-radius:10px;padding:12px;font-weight:700}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.tools button,.tools select{padding:9px 12px;border:1px solid var(--line);border-radius:9px;background:#fff}
+.ord{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.ord:first-child{border-top:0}.ord small{color:var(--mut)}.ord .sum{font-weight:700;text-align:right}
+.ord select{padding:6px;font-size:13px}.del{border:0;background:none;color:#c0392b;font-size:13px}
+.tag{display:inline-block;padding:2px 8px;border-radius:99px;font-size:12px;background:#e8ecf7}
+.s-Новый{background:#e8ecf7}.s-Оплачен{background:#dcf5e6}.s-Отправлен{background:#fdf0d0}.s-Выдан{background:#e6e6e6}
+.empty{color:var(--mut);text-align:center;padding:20px}
+</style></head><body><div class="wrap">
+<div class="demo">Демо-проект. Данные хранятся только в этом браузере (на этом устройстве) и никуда не отправляются. Имена в примерах вымышленные.</div>
+<h1>Учёт заказов</h1>
+<div class="stats"><div class="st"><b id="cnt">0</b><span>заказов</span></div><div class="st"><b id="all">0 ₽</b><span>на сумму</span></div><div class="st"><b id="paid">0 ₽</b><span>оплачено</span></div></div>
+<div class="card"><div class="grid">
+<input id="cl" placeholder="Клиент"><input id="ph" placeholder="Телефон или @ник">
+<input id="it" class="w" placeholder="Что заказали">
+<input id="pr" type="number" min="0" placeholder="Сумма, ₽"><select id="stt"></select>
+<button class="main w" id="add">Добавить заказ</button></div></div>
+<div class="tools"><select id="flt"></select><button id="demoBtn">Заполнить примером</button><button id="csv">Скачать CSV</button><button id="clr">Очистить всё</button></div>
+<div class="card" id="list"></div></div>
+<script>
+// ===== НАСТРОЙКИ =====
+const CONFIG={statuses:["Новый","Оплачен","Отправлен","Выдан"],key:"orders_demo_v1"};
+// =====================
+const $=id=>document.getElementById(id);let data=[];
+function load(){try{data=JSON.parse(localStorage.getItem(CONFIG.key)||"[]")}catch(e){data=[]}}
+function save(){try{localStorage.setItem(CONFIG.key,JSON.stringify(data))}catch(e){}}
+const fmt=n=>(+n).toLocaleString("ru-RU")+" ₽";const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+$("stt").innerHTML=CONFIG.statuses.map(s=>`<option>${s}</option>`).join("");
+$("flt").innerHTML='<option value="">Все статусы</option>'+CONFIG.statuses.map(s=>`<option>${s}</option>`).join("");
+function draw(){
+ const f=$("flt").value,rows=data.filter(o=>!f||o.st===f);
+ $("cnt").textContent=data.length;$("all").textContent=fmt(data.reduce((a,o)=>a+o.pr,0));
+ $("paid").textContent=fmt(data.filter(o=>o.st!=="Новый").reduce((a,o)=>a+o.pr,0));
+ $("list").innerHTML=rows.length?rows.slice().reverse().map(o=>`<div class="ord"><div><b>${esc(o.cl)}</b> <small>${esc(o.ph)}</small><br>${esc(o.it)}<br><small>${o.d}</small></div><div class="sum">${fmt(o.pr)}</div>
+ <div><select data-id="${o.id}" class="s-${o.st}">${CONFIG.statuses.map(s=>`<option ${s===o.st?"selected":""}>${s}</option>`).join("")}</select></div><div style="text-align:right"><button class="del" data-del="${o.id}">удалить</button></div></div>`).join(""):'<div class="empty">Заказов пока нет. Добавьте первый выше.</div>';
+ $("list").querySelectorAll("select").forEach(s=>s.onchange=()=>{data.find(o=>o.id==s.dataset.id).st=s.value;save();draw()});
+ $("list").querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{data=data.filter(o=>o.id!=b.dataset.del);save();draw()});
+}
+$("add").onclick=()=>{const cl=$("cl").value.trim(),it=$("it").value.trim(),pr=+$("pr").value;
+ if(!cl||!it||!(pr>=0)||$("pr").value===""){alert("Заполните клиента, заказ и сумму");return}
+ data.push({id:Date.now()+Math.random(),cl,ph:$("ph").value.trim(),it,pr,st:$("stt").value,d:new Date().toLocaleDateString("ru-RU")});
+ ["cl","ph","it","pr"].forEach(i=>$(i).value="");save();draw()};
+$("flt").onchange=draw;
+$("demoBtn").onclick=()=>{const d=new Date().toLocaleDateString("ru-RU");[["Анна К.","@anna_demo","Футболка оверсайз, 2 шт.",2400,"Оплачен"],["Игорь","+7 900 000-00-01","Чехол для телефона",600,"Новый"],["Мария","@maria_demo","Худи чёрное, M",3200,"Отправлен"],["Олег","+7 900 000-00-02","Кружка с печатью",450,"Выдан"]].forEach((r,i)=>data.push({id:Date.now()+i,cl:r[0],ph:r[1],it:r[2],pr:r[3],st:r[4],d}));save();draw()};
+$("clr").onclick=()=>{if(confirm("Удалить все заказы на этом устройстве?")){data=[];save();draw()}};
+$("csv").onclick=()=>{const q=v=>'"'+String(v).replace(/"/g,'""')+'"';const t="﻿Дата;Клиент;Контакт;Заказ;Сумма;Статус\n"+data.map(o=>[o.d,o.cl,o.ph,o.it,o.pr,o.st].map(q).join(";")).join("\n");
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/csv;charset=utf-8"}));a.download="zakazy.csv";a.click()};
+load();draw();
+</script></body></html>

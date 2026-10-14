@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Портфолио: сайты, боты и мини-приложения</title>
+<meta name="description" content="Делаю одностраничные сайты, калькуляторы, квизы и Telegram-ботов для малого бизнеса в Стерлитамаке">
+<style>
+:root{--ink:#14181f;--mut:#5d6675;--bg:#f6f7fa;--card:#fff;--line:#e2e6ee;--acc:#4c5bf0}
+*{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+.wrap{max-width:980px;margin:0 auto;padding:0 18px}
+#banner{background:#fff3cd;border-bottom:1px solid #f1d98a;padding:10px 18px;font-size:14px;text-align:center}
+.hero{padding:56px 0 30px}.hero h1{font-size:clamp(30px,6vw,52px);line-height:1.1;margin:0 0 12px}.hero p{font-size:19px;color:var(--mut);max-width:640px;margin:0 0 22px}
+.btn{display:inline-block;padding:13px 20px;border-radius:12px;background:var(--acc);color:#fff;text-decoration:none;font-weight:700;margin:0 8px 8px 0}
+.btn.alt{background:#fff;color:var(--ink);border:1px solid var(--line)}
+h2{font-size:28px;margin:44px 0 16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.card img{width:100%;height:230px;object-fit:cover;object-position:top;background:#e9ecf3;display:block}
+.card .b{padding:14px 16px 18px;display:flex;flex-direction:column;gap:6px;flex:1}.card h3{margin:0;font-size:18px}.card p{margin:0;color:var(--mut);font-size:14.5px;flex:1}
+.card a{color:var(--acc);font-weight:700;text-decoration:none}
+.card .thumb{display:block;line-height:0}.card:hover{box-shadow:0 8px 24px rgba(20,24,31,.10);transform:translateY(-2px)}.card{transition:.15s}
+.price{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}.price .card{padding:16px}.price b{font-size:22px}
+ul.how{padding-left:20px}.how li{margin:6px 0}
+footer{margin:50px 0 30px;padding-top:20px;border-top:1px solid var(--line);color:var(--mut);font-size:14px}
+</style></head><body>
+<div id="banner" hidden>Не забудь заменить данные в блоке CONFIG в конце файла: имя, Telegram, VK. Эта плашка исчезнет сама.</div>
+<div class="wrap">
+<section class="hero"><h1 id="h1"></h1><p id="lead"></p><a class="btn" id="tg" href="#">Написать в Telegram</a><a class="btn alt" id="vk" href="#">VK</a></section>
+
+<h2>Примеры работ</h2>
+<p style="color:var(--mut);margin-top:-8px">Это демо-проекты на вымышленных данных: нажмите, чтобы пройти весь сценарий. Для клиента всё настраивается под его цены и меню.</p>
+<div class="grid">
+<div class="card"><a class="thumb" href="potolki.html" aria-label="Открыть демо"><img src="thumbs/potolki.png" alt="Калькулятор потолков" loading="lazy"></a><div class="b"><h3>Калькулятор стоимости</h3><p>Клиент сам считает цену потолка, заявка уходит мастеру в Telegram.</p><a href="potolki.html">Открыть демо →</a></div></div>
+<div class="card"><a class="thumb" href="quiz_fitness.html" aria-label="Открыть демо"><img src="thumbs/quiz.png" alt="Квиз для фитнес-клуба" loading="lazy"></a><div class="b"><h3>Квиз для фитнес-клуба</h3><p>Подбирает программу и собирает заявки на пробную тренировку.</p><a href="quiz_fitness.html">Открыть демо →</a></div></div>
+<div class="card"><a class="thumb" href="menu_kafe.html" aria-label="Открыть демо"><img src="thumbs/menu.png" alt="Меню кофейни с заказом" loading="lazy"></a><div class="b"><h3>Меню и заказ с телефона</h3><p>Кофейня: меню по разделам, корзина и заказ в Telegram без звонков.</p><a href="menu_kafe.html">Открыть демо →</a></div></div>
+<div class="card"><a class="thumb" href="crm_zakazy.html" aria-label="Открыть демо"><img src="thumbs/crm.png" alt="Учёт заказов" loading="lazy"></a><div class="b"><h3>Учёт заказов</h3><p>Мини-CRM для небольшого магазина: статусы, суммы, выгрузка в CSV.</p><a href="crm_zakazy.html">Открыть демо →</a></div></div>
+<div class="card"><a class="thumb" href="demo_barbershop.html" aria-label="Открыть демо"><img src="thumbs/barber.png" alt="Сайт барбершопа" loading="lazy"></a><div class="b"><h3>Сайт барбершопа с записью</h3><p>Одностраничный сайт с формой записи на время.</p><a href="demo_barbershop.html">Открыть демо →</a></div></div>
+<div class="card"><a class="thumb" href="calc_klining.html" aria-label="Открыть демо"><img src="thumbs/klining.png" alt="Калькулятор уборки" loading="lazy"></a><div class="b"><h3>Калькулятор уборки</h3><p>Клининг: площадь, вид уборки, допы. Заявка уходит в Telegram.</p><a href="calc_klining.html">Открыть демо →</a></div></div>
+<div class="card"><a class="thumb" href="calc_gruzoperevozki.html" aria-label="Открыть демо"><img src="thumbs/gruz.png" alt="Калькулятор грузоперевозки" loading="lazy"></a><div class="b"><h3>Калькулятор грузоперевозки</h3><p>Машина, часы, грузчики, маршрут: цена считается сразу.</p><a href="calc_gruzoperevozki.html">Открыть демо →</a></div></div>
+<div class="card"><a class="thumb" href="calc_remont.html" aria-label="Открыть демо"><img src="thumbs/remont.png" alt="Калькулятор ремонта" loading="lazy"></a><div class="b"><h3>Калькулятор ремонта</h3><p>Тип ремонта и работы под ключ: ориентировочная смета.</p><a href="calc_remont.html">Открыть демо →</a></div></div>
+<div class="card"><a class="thumb" href="koleso_akciya.html" aria-label="Открыть демо"><img src="thumbs/koleso.png" alt="Колесо призов для акции" loading="lazy"></a><div class="b"><h3>Колесо призов для акции</h3><p>Новогодняя акция: клиент крутит колесо и получает код.</p><a href="koleso_akciya.html">Открыть демо →</a></div></div>
+<div class="card"><a class="thumb" href="vizitka_master.html" aria-label="Открыть демо"><img src="thumbs/vizitka.png" alt="Визитка мастера" loading="lazy"></a><div class="b"><h3>Визитка мастера</h3><p>Страница мастера: прайс, работы, запись в Telegram.</p><a href="vizitka_master.html">Открыть демо →</a></div></div>
+<div class="card"><a class="thumb" href="otkrytka_ny.html" aria-label="Открыть демо"><img src="thumbs/otkrytka.png" alt="Новогодняя открытка" loading="lazy"></a><div class="b"><h3>Новогодняя открытка</h3><p>Персональная открытка с именем и конструктор ссылок для сотрудников.</p><a href="otkrytka_ny.html">Открыть демо →</a></div></div>
+</div>
+
+<h2>Что делаю и сколько это стоит</h2>
+<div class="price">
+<div class="card"><b>от 4 000 ₽</b><br>Сайт-визитка за 3-5 дней: адаптивный, с формой заявки и картой.</div>
+<div class="card"><b>от 3 000 ₽</b><br>Калькулятор или квиз под ваши цены, заявки в Telegram.</div>
+<div class="card"><b>от 3 000 ₽</b><br>Telegram-бот: запись, заявки, ответы на частые вопросы.</div>
+<div class="card"><b>от 2 000 ₽</b><br>Акции к праздникам: колесо призов, персональные открытки.</div>
+<div class="card"><b>от 800 ₽</b><br>Монтаж вертикального видео для VK Клипов, Shorts и Telegram.</div>
+</div>
+
+<h2>Как работаем</h2>
+<ol class="how"><li>Пишете, что нужно. Я задаю 3-5 вопросов и называю цену и срок.</li><li>Предоплата 30-50%, показываю рабочую версию на телефоне.</li><li>Вносим до 2 правок, вы принимаете, оплачиваете остаток.</li><li>Передаю файлы и инструкцию, как менять тексты и цены.</li></ol>
+<footer>Мне 17 лет, работаю с согласия родителей, договор оформляем письменно. Использую нейросети для ускорения, весь результат проверяю вручную.</footer>
+</div>
+<script>
+// ===== ЗАМЕНИ СВОИМИ ДАННЫМИ =====
+const CONFIG = {
+  name: "Рамиль",
+  telegram: "spayfismm",
+  vk: "https://vk.ru/id449983999"
+};
+// =================================
+const bad=Object.values(CONFIG).some(v=>v.includes("["));
+if(bad)document.getElementById("banner").hidden=false;
+document.getElementById("h1").textContent=bad?"Сайты, боты и видео для вашего бизнеса":"Сайты, боты и видео для бизнеса. "+CONFIG.name;
+document.getElementById("lead").textContent="Делаю одностраничные сайты, калькуляторы, квизы и Telegram-ботов для малого бизнеса в Стерлитамаке. Быстро, по фиксированной цене.";
+document.getElementById("tg").href=bad?"#":"https://t.me/"+CONFIG.telegram;
+document.getElementById("vk").href=CONFIG.vk.includes("[")?"#":CONFIG.vk;
+</script></body></html>
